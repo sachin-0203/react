@@ -1,16 +1,21 @@
 import { useState } from 'react'
-import { addVal, delVal, resVal, cusVal } from './features/counter/CounterSlice'
+import { addVal, delVal, resVal, cusAdd, cusSub } from './features/counter/CounterSlice'
 import { useSelector, useDispatch } from 'react-redux'
+import { incrementAsync } from './features/counter/CounterSlice'
 
 function App() {
 
-  const count = useSelector((state)=> state.counter.count)
   const dispatch = useDispatch()
+  const count = useSelector((state)=> state.counter.count)
+  const status = useSelector((state)=> state.counter.status)
 
   const [number , setNumber] = useState("")
 
-  const handleCusAdd = ()=>{
-    dispatch(cusVal(Number(number)))
+  const handleCusVal = (btn)=>{
+    if(btn === 'Add')
+      dispatch(cusAdd(Number(number)))
+    else
+      dispatch(cusSub(Number(number)))
     setNumber("")
   }
 
@@ -31,17 +36,40 @@ function App() {
           <button
             key={index}
             onClick={btn.onClick}
-            className='border px-2 text-sm rounded-sm cursor-pointer outline-none' >
-              {btn.label}
-            </button>
+            disabled = {btn.label === "Decrement" && count <= 0}
+            className={`border py-1 px-2 text-sm rounded-sm cursor-pointer outline-none active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed  `}
+          >
+            {btn.label}
+          </button>
         ))}
       </div>
+
       <div>
-        <input type="number" name="number" id="number"
+        <input 
+          type="number"
           onChange={(e)=> setNumber(e.target.value)}
-          value={number} placeholder='enter custome number'
-         className='outline-none border rounded-md ml-1 w-fit text-sm' />
-        <button onClick={handleCusAdd} className='border px-2 text-sm rounded-sm cursor-pointer outline-none' >Add</button>
+          value={number} placeholder='Enter value'
+          className='outline-none border rounded-sm ml-1 w-fit text-sm pl-1'
+        />
+
+        <button 
+          onClick={()=> handleCusVal("Add")} className='border px-2 text-sm rounded-sm cursor-pointer outline-none active:scale-95 mx-2' 
+        >
+          Add
+        </button>
+        <button
+          disabled = {count<=0}
+          onClick={()=> handleCusVal("Del")} className='border px-2 text-sm rounded-sm cursor-pointer outline-none active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed'
+        >
+          Del
+        </button>
+      </div>
+
+      <div className='flex gap-3'>
+        <button className='border py-1 px-2 text-sm rounded-sm cursor-pointer outline-none active:scale-95'  onClick={()=> dispatch(incrementAsync()) }>
+          Increment After 1s
+        </button>
+        {status === "loading" && <p>Loading...</p>}
       </div>
     </div>
     </>
