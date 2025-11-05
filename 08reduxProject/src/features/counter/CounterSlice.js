@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 const initialState = { 
   count : 0,
   status: "idle",
+  name : "",
 }
 
 const counterSlice = createSlice({
@@ -37,10 +38,11 @@ const counterSlice = createSlice({
     builder
       .addCase(incrementAsync.pending  , (state)=>{
         state.status = "loading";
+        state.name = ""
       })
       .addCase(incrementAsync.fulfilled, (state,action) =>{
         state.status = "success";
-        state.count += action.payload;
+        state.name = action.payload.name;
       })
       .addCase(incrementAsync.rejected, (state)=>{
         state.status = "failed";
@@ -51,8 +53,11 @@ const counterSlice = createSlice({
 export const incrementAsync = createAsyncThunk(
   "counter/incrementAsync",
   async (delay = 1000)=>{
-    await new Promise((resolve) => setTimeout(resolve,delay));
-    return 1;
+    const num = Math.floor( Math.random()*10 ) + 1;
+
+    const response = await  fetch(`https://jsonplaceholder.typicode.com/users/${num}`);
+    const data = await response.json();
+    return data;
   }
 )
 

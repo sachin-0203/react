@@ -8,6 +8,7 @@ function App() {
   const dispatch = useDispatch()
   const count = useSelector((state)=> state.counter.count)
   const status = useSelector((state)=> state.counter.status)
+  const name = useSelector((state)=> state.counter.name)
 
   const [number , setNumber] = useState("")
 
@@ -26,7 +27,7 @@ function App() {
   ]
   return (
     <>
-    <div className= 'mx-auto border-2 border-dashed border-green-900 w-fit p-5 rounded-md space-y-4 mt-50 '>
+    <div className= 'mx-auto border-2 border-dashed border-emerald-200 w-fit p-5 rounded-md space-y-4 mt-50  '>
       <h3 className='text-center' >
         Counter Value : {count}
       </h3>
@@ -67,9 +68,10 @@ function App() {
 
       <div className='flex gap-3'>
         <button className='border py-1 px-2 text-sm rounded-sm cursor-pointer outline-none active:scale-95'  onClick={()=> dispatch(incrementAsync()) }>
-          Increment After 1s
+          Get Random user
         </button>
         {status === "loading" && <p>Loading...</p>}
+        {name}
       </div>
     </div>
     </>
