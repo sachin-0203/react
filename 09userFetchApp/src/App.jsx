@@ -23,8 +23,8 @@ function App() {
 
   return (
     <>
-      <div className='text-white h-80 w-80 '>
-        <div className='border border-sky-500  items-center rounded-md p-2 '>
+      <div className='  text-white h-80 w-80 m-5 '>
+        <div className='  items-center rounded-md p-5 bg-slate-700 shadow-inner '>
 
           <h1 className='text-sky-200 text-4xl border-b pb-1'>
             User Fetcher App
@@ -40,33 +40,33 @@ function App() {
 
             { status === 'Succeeded' && <div className=' space-y-4 pt-4 '>
 
-              <div className='border-x  rounded-sm'>
+              <div className='border-x border-sky-200 rounded-sm'>
                 <div className='flex gap-2 px-2'>
                   <label >Name : </label>
                   <div>{userData.name}</div>
                 </div>
               </div>
-              <div className='border-x  rounded-sm'>
+              <div className='border-x  border-sky-200  rounded-sm'>
                 <div className='flex gap-2 px-2'>
                   <label >Username : </label>
                   <div>{userData.username}</div>
                 </div>
               </div>
-              <div className='border-x  rounded-sm'>
+              <div className='border-x  border-sky-200  rounded-sm'>
                 <div className='flex gap-2 px-2'>
                   <label >Email : </label>
                   <div>{userData.email}</div>
                 </div>
               </div>
-              <div className='border-x  rounded-sm'>
+              <div className='border-x  border-sky-200  rounded-sm'>
                 <div className='flex gap-2 px-2'>
                   <label >Phone : </label>
                   <div>{userData.phone}</div>
                 </div>
               </div>
-              <div className='border-x  rounded-sm'>
+              <div className='border-x  border-sky-200  rounded-sm'>
                 <div className='flex gap-2 px-2'>
-                  <label >Address : </label>
+                  <label >Address:</label>
                   <div>{userData.address}</div>
                 </div>
               </div>
@@ -87,9 +87,12 @@ function App() {
             </div> }
 
           </div>
-          <button className='border w-full rounded-full active:scale-95 outline-none py-1 mt-5' onClick={handleFetch}>
-            Fetch
-          </button>
+          <div>
+
+            <button className=' font-mono border w-full rounded-full active:scale-95 outline-none py-1 mt-5 bg-slate-800 duration-200 ' onClick={handleFetch}>
+              Fetch
+            </button>
+          </div>
         </div>
       </div>
       
