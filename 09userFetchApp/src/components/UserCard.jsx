@@ -15,9 +15,9 @@ export const UserCard = () => {
 
   return ( 
     <>
-      <div className='h-58 pt-3 overflow-auto '>
+      <div className='h-58 pt-3 overflow-y-scroll scrollbar-hide '>
 
-          {userList == null ? (
+          {userList.length == 1 ? (
             <div className="border py-2 space-y-3 rounded-sm border-sky-200 mb-2 ">
               {Object.entries(userData).map(([key, value]) => (
                 <div key={key}  className='  rounded-sm'>
@@ -60,13 +60,18 @@ export const UserCard = () => {
 };
 
 export const ErrorCard = () => {
+
+  
+  const {error} = useSelector(state => state.user)
+
   return(
-    <div>
+    <div className="text-center">
       <img 
-        className=' object-cover w-76 h-54 p-2 ' 
+        className=' object-cover w-76 h-54 pt-2 ' 
         src="/error.jpg" 
         alt="404" 
       />
+      <div className="text-xs font-light text-red-300">{error}</div>
     </div>
   );
 };
