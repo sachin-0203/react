@@ -1,11 +1,17 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserById, userDetails } from "../features/user/UserSlice";
+import { Plus } from "lucide-react";
+import { useState } from "react";
 
 
 export const UserCard = () => {  
 
-  const {user , userList} = useSelector(state => state.user)
+  const dispatch = useDispatch();
+  const {user , userList, userDetail} = useSelector(state => state.user);
+  const [checkedId, setCheckedId] = useState(null)
 
   const userData = {
+    Id: user.id,
     Name : user.name,
     Username : user.username,
     Email : user.email,
@@ -13,12 +19,17 @@ export const UserCard = () => {
     Address: `${user.address.street}, ${user.address.city}`
   }
 
+  const handleClick = (id)=>{
+    setCheckedId(prev => (prev === id)? null : id)
+  }
+
+
   return ( 
     <>
       <div className='h-58 pt-3 overflow-y-scroll scrollbar-hide '>
 
           {userList.length == 1 ? (
-            <div className="border py-2 space-y-3 rounded-sm border-sky-200 mb-2 ">
+            <div className=" py-2 space-y-3 rounded-sm bg-sky-950 mb-2 ">
               {Object.entries(userData).map(([key, value]) => (
                 <div key={key}  className='  rounded-sm'>
                   <div  className='flex gap-2 px-2'>
@@ -32,23 +43,51 @@ export const UserCard = () => {
             (
               <div>
               {userList?.map((item,index)=>(
-                <div key={index} className="border border-sky-200  rounded-sm p-2 mb-2 ">
-                  
+                <div 
+                  key={index} 
+                  className={`${checkedId === item.id ? 'max-h-96' : 'max-h-17'} overflow-hidden bg-sky-950  rounded-sm p-2 mb-2 transition-all duration-400 linear relative `}
+                >
+
+                  <div className="p-1 ">
+                    <button className="absolute top-1 right-1" onClick={()=>handleClick(item.id)} >
+                      <Plus size={18} className={` ${checkedId === item.id? "rotate-45" : ""} duration-400 `}   />
+                    </button>
+                    <input 
+                      type="checkbox" 
+                      name="userDetails" 
+                      id={`check-${item.id}`} 
+                      checked = {checkedId === item.id}
+                      readOnly
+                      className="hidden" />
+                  </div>
+
+                  <div className="flex gap-2 px-2">
+                    <strong>Id:</strong>
+                    <div>{item.id}</div>
+                  </div>
+
                   <div className="flex gap-2 px-2">
                     <strong>Name:</strong>
                     <div>{item.name}</div>
                   </div>
-
                   <div className="flex gap-2 px-2">
                     <strong>Username:</strong>
                     <div>{item.username}</div>
                   </div>
-
                   <div className="flex gap-2 px-2">
                     <strong>Email:</strong>
                     <div>{item.email}</div>
                   </div>
-                  
+                  <div className="flex gap-2 px-2">
+                    <strong>Phone:</strong>
+                    <div>{item.phone}</div>
+                  </div>
+                  <div className="flex gap-2 px-2">
+                    <strong>Address:</strong>
+                    <div>{item.address.street},{item.address.city}</div>
+                  </div>
+
+
                 </div>
               ))}
               </div>

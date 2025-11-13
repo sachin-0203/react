@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { fetchUserById} from "../features/user/UserSlice";
 import { useState } from "react";
+import { Search } from 'lucide-react'
 
 
 export const CustomeFetch = () => {
@@ -16,23 +17,19 @@ export const CustomeFetch = () => {
   return (
   <>
     <div className="py-2">
-      <form action="submit" className="relative">
+      <form onSubmit={handleSubmit} className="relative">
         <input 
           type="number" 
           name="userId" 
           id="userId" 
-          placeholder="enter id "
-          className=" outline-none bg-sky-900 border border-slate-500 rounded-sm no-spinner w-full px-1"  
+          placeholder="search user"
+          className=" outline-none bg-slate-800 opacity-50 border border-slate-500 rounded-full no-spinner w-full  text-center"  
           onChange={e => setUserId(e.target.value) }
           value={userId}
         />
-        <button 
-          type="submit" 
-          className=" absolute right-1 top-0.5 px-2 rounded-sm text-sm border border-slate-500 cursor-pointer bg-slate-800 active:scale-95 duration-200"
-          onClick={handleSubmit}
-        >
-          Fetch
-        </button>
+        <label className=" absolute left-0 top-1 opacity-50  px-2 rounded-sm text-sm ">
+          <Search size={18} />
+        </label>
       </form>
     </div>
   </>

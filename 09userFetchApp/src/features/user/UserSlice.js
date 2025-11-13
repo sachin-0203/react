@@ -2,35 +2,45 @@ import { createSlice , createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 
+export const userDetails = createAsyncThunk('user/userDetails', async(id, {rejectWithValue}) =>{
+
+  try{
+    const resp = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`);
+    return resp.data;
+  }
+  catch(error){
+    return rejectWithValue('No user found')
+  }
+
+})
+
 export const fetchUsers = createAsyncThunk("user/fetchUsers", async(_,{rejectWithValue}) =>{
 
   try{
-    const userId =  Math.floor(Math.random()*12 + 1);
+    const userId =  Math.floor(Math.random()*10 + 1);
     const response = await axios.get(`https://jsonplaceholder.typicode.com/users/${userId}`);
     
     return response.data;
 
   }
   catch(error){
-    return rejectWithValue(error.response?.data || "No user found")
+    return rejectWithValue("No user found")
   }
 })
 
 export const fetchUserById = createAsyncThunk("user/fetchUserById", async(id,{rejectWithValue}) =>{
 
   if (!id) {
-    return rejectWithValue("User ID cannot be empty");
+    return rejectWithValue("Please enter a user Id");
   }
   try{
     const userId = id;
     const response = await axios.get(`https://jsonplaceholder.typicode.com/users/${userId}`);
-    
-    console.log("res", response)
     return response.data;
 
   }
   catch(error){
-    return rejectWithValue("No user found")
+    return rejectWithValue("No user found with this id")
   }
 })
 
@@ -46,6 +56,17 @@ export const fetchAllUsers = createAsyncThunk( "user/fetchAllUsers", async(_,rej
 
 const initialState = {
   user : {
+    id : null,
+    name : "",
+    username: '',
+    email : '',
+    phone : '',
+    address: {
+      street: "",
+      city: "",
+    },
+  },
+  userDetail : {
     id : null,
     name : "",
     username: '',
@@ -91,10 +112,32 @@ const userSlice = createSlice({
       }]
       state.status = 'initial'
       state.error = null
-    }
+    },
   },
 
   extraReducers : (builder)=>{
+
+    builder
+    .addCase(userDetails.pending, (state)=>{
+
+    })
+    .addCase(userDetails.fulfilled, (state,action)=>{
+      const data = action.payload;
+      state.userDetail = {
+        id : data.id,
+        name : data.name,
+        username: data.username,
+        email : data.email,
+        phone : data.phone,
+        address: {
+          street: data.address.street,
+          city: data.address.city,
+        },
+      }
+    })
+    .addCase(userDetails.rejected, (state)=>{
+
+    })
 
     // fetch One User 
     builder
@@ -104,7 +147,18 @@ const userSlice = createSlice({
         name: '',
         username : '',
         email : ''
-      }]
+      }];
+      state.userDetail = {
+        id : null,
+        name : "",
+        username: '',
+        email : '',
+        phone : '',
+        address: {
+          street: "",
+          city: "",
+        },
+      }
       state.error = null;
     })
     .addCase(fetchUsers.fulfilled, (state, action)=>{
@@ -130,7 +184,7 @@ const userSlice = createSlice({
         username : '',
         email : ''
       }];
-      state.user = {
+      state.userDetail = {
         id : null,
         name : "",
         username: '',
@@ -162,7 +216,18 @@ const userSlice = createSlice({
     builder
     .addCase(fetchAllUsers.pending , (state)=>{
       state.status = 'Loading';
-      state.error = null
+      state.error = null;
+      state.userDetail = {
+        id : null,
+        name : "",
+        username: '',
+        email : '',
+        phone : '',
+        address: {
+          street: "",
+          city: "",
+        },
+      }
     })
     .addCase(fetchAllUsers.fulfilled, (state,action) =>{
       state.status = 'Success';
