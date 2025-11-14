@@ -1,24 +1,19 @@
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUsers, clearUser, fetchAllUsers, fetchUserById } from "../features/user/UserSlice";
+import { fetchRandomUser, clearUser, fetchAllUsers, fetchUserById } from "../features/user/UserSlice";
 
 
 export const UserActions = () => {
 
   const dispatch = useDispatch();
-  const { user, status } = useSelector(state => state.user);
+  const { user, selectedUserId, userList } = useSelector(state => state.user);
 
 
 
   const buttons = [
     { 
       label : 'Fetch' , 
-      onclick: ()=> dispatch(fetchUsers()), 
+      onclick: ()=> dispatch(fetchRandomUser()), 
       disabled: false  
-    },
-    { 
-      label : 'Reload', 
-      onclick: ()=> dispatch(fetchUserById(user.id)),
-      disabled: user.id === null ,
     },
     { 
       label : 'All Users' ,
@@ -26,9 +21,14 @@ export const UserActions = () => {
       disabled: false,
     },
     { 
+      label : 'Reload', 
+      onclick: ()=> dispatch(fetchUserById(selectedUserId)),
+      disabled: !user ,
+    },
+    { 
       label : 'Clear' , 
       onclick: ()=> dispatch(clearUser()),
-      disabled: user.id === null,
+      disabled: !user && userList.length == 0,
     },
   ]
 

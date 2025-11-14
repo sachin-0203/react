@@ -2,19 +2,8 @@ import { createSlice , createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 
-export const userDetails = createAsyncThunk('user/userDetails', async(id, {rejectWithValue}) =>{
 
-  try{
-    const resp = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`);
-    return resp.data;
-  }
-  catch(error){
-    return rejectWithValue('No user found')
-  }
-
-})
-
-export const fetchUsers = createAsyncThunk("user/fetchUsers", async(_,{rejectWithValue}) =>{
+export const fetchRandomUser = createAsyncThunk("user/fetchUsers", async(_,{rejectWithValue}) =>{
 
   try{
     const userId =  Math.floor(Math.random()*10 + 1);
@@ -44,7 +33,7 @@ export const fetchUserById = createAsyncThunk("user/fetchUserById", async(id,{re
   }
 })
 
-export const fetchAllUsers = createAsyncThunk( "user/fetchAllUsers", async(_,rejectWithValue)=>{
+export const fetchAllUsers = createAsyncThunk( "user/fetchAllUsers", async(_,{rejectWithValue})=>{
   try{
     const response = await axios.get('https://jsonplaceholder.typicode.com/users');
     return response.data;
@@ -55,34 +44,10 @@ export const fetchAllUsers = createAsyncThunk( "user/fetchAllUsers", async(_,rej
 })
 
 const initialState = {
-  user : {
-    id : null,
-    name : "",
-    username: '',
-    email : '',
-    phone : '',
-    address: {
-      street: "",
-      city: "",
-    },
-  },
-  userDetail : {
-    id : null,
-    name : "",
-    username: '',
-    email : '',
-    phone : '',
-    address: {
-      street: "",
-      city: "",
-    },
-  },
-  userList: [{
-    name: '',
-    username : '',
-    email : ''
-  }],
-  status : 'initial',
+  user : null,
+  userList: [],
+  selectedUserId: null,
+  status : 'idle',
   error : null
 }
 
@@ -94,148 +59,65 @@ const userSlice = createSlice({
   
   reducers : {
     clearUser : (state)=>{
-      state.user = {
-        id : null,
-        name : "",
-        username: '',
-        email : '',
-        phone : '',
-        address: {
-          street: "",
-          city: "",
-        },
-      }
-      state.userList = [{
-        name: '',
-        username : '',
-        email : ''
-      }]
-      state.status = 'initial'
-      state.error = null
+      state.user     = null;
+      state.userList = [];
+      state.status   = 'idle';
+      state.error    = null;
+      state.selectedUserId = null;
     },
   },
 
   extraReducers : (builder)=>{
 
-    builder
-    .addCase(userDetails.pending, (state)=>{
-
-    })
-    .addCase(userDetails.fulfilled, (state,action)=>{
-      const data = action.payload;
-      state.userDetail = {
-        id : data.id,
-        name : data.name,
-        username: data.username,
-        email : data.email,
-        phone : data.phone,
-        address: {
-          street: data.address.street,
-          city: data.address.city,
-        },
-      }
-    })
-    .addCase(userDetails.rejected, (state)=>{
-
-    })
 
     // fetch One User 
     builder
-    .addCase(fetchUsers.pending, (state)=>{
-      state.status = 'Loading';
-      state.userList = [{
-        name: '',
-        username : '',
-        email : ''
-      }];
-      state.userDetail = {
-        id : null,
-        name : "",
-        username: '',
-        email : '',
-        phone : '',
-        address: {
-          street: "",
-          city: "",
-        },
-      }
-      state.error = null;
+    .addCase(fetchRandomUser.pending, (state)=>{
+      state.status   = 'loading';
+      state.userList = [];
+      state.error    = null;
     })
-    .addCase(fetchUsers.fulfilled, (state, action)=>{
-      state.status = 'Success';
-      state.user = action.payload;
+    .addCase(fetchRandomUser.fulfilled, (state, action)=>{
+      state.status = 'succeded';
+      state.user   = action.payload;
+      state.selectedUserId = action.payload.id; 
     })
-    .addCase(fetchUsers.rejected, (state,action)=>{
-      state.status = 'Failed';
-      state.userList = [{
-        name: '',
-        username : '',
-        email : ''
-      }]
-      state.error = action.payload;
+    .addCase(fetchRandomUser.rejected, (state,action)=>{
+      state.status = 'failed';
+      state.error  = action.payload;
     })
 
 
     builder
     .addCase(fetchUserById.pending, (state)=>{
-      state.status = 'Loading';
-      state.userList = [{
-        name: '',
-        username : '',
-        email : ''
-      }];
-      state.userDetail = {
-        id : null,
-        name : "",
-        username: '',
-        email : '',
-        phone : '',
-        address: {
-          street: "",
-          city: "",
-        },
-      };
-      state.error = null;
+      state.status   = 'loading';
+      state.userList = [];
+      state.error    = null;
     })
     .addCase(fetchUserById.fulfilled, (state, action)=>{
-      state.status = 'Success';
-      state.user = action.payload;
+      state.status = 'succeded';
+      state.user   = action.payload;
+      state.selectedUserId = action.payload.id;
     })
     .addCase(fetchUserById.rejected, (state,action)=>{
-      state.status = 'Failed';
-      state.userList = [{
-        name: '',
-        username : '',
-        email : ''
-      }];
-      state.error = action.payload || action.error.message;
+      state.status = 'failed';
+      state.error  = action.payload || "failed to fetch user by ID";
     })
 
 
     // fetch All Users
     builder
     .addCase(fetchAllUsers.pending , (state)=>{
-      state.status = 'Loading';
-      state.error = null;
-      state.userDetail = {
-        id : null,
-        name : "",
-        username: '',
-        email : '',
-        phone : '',
-        address: {
-          street: "",
-          city: "",
-        },
-      }
+      state.status = 'loading';
+      state.error  = null;
     })
     .addCase(fetchAllUsers.fulfilled, (state,action) =>{
-      state.status = 'Success';
+      state.status   = 'succeded';
       state.userList = action.payload;
     })
     .addCase(fetchAllUsers.rejected , (state,action)=>{
-      state.status = 'Failed';
-      state.error = action.payload;
+      state.status = 'failed';
+      state.error  = action.payload || "failed to fetch users";
     })
 
   }
