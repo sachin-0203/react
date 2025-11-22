@@ -1,13 +1,20 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 function App() {
-  const buttons = [ 'red', 'green', 'yellow', 'blue', 'lightgreen', 'purple', 'violet', 'lightblue', 'lime', 'gray', 'pink'];
+  const buttons = [ 'lavender', 'linen', 'Salmon', 'palegreen', 'Moccasin', 'steelblue', 'olive', 'maroon', 'teal', 'lightblue', 'floralWhite', 'slategray', 'plum'];
   const [active, setActive] = useState(0);
   const [sliderPosition, setSliderPosition] = useState(0);
   const [sliderWidth, setSliderWidth] = useState(0);
   const buttonRefs = useRef([])
-  const [color, setColor] = useState(buttons[0]);
+  const [color, setColor] = useState(buttons[active]);
   
+  useEffect(()=>{
+    const firstBtn = buttonRefs.current[active]
+    if(firstBtn){
+      setSliderPosition(firstBtn.offsetLeft)
+      setSliderWidth(firstBtn.offsetWidth)
+    }
+  }, [])
 
   const handleClick = (index,btn)=>{
     const btns = buttonRefs.current[index]
@@ -29,7 +36,7 @@ function App() {
 
 
         <div 
-          className=' absolute rounded-full h-11 transition-all duration-300 bg-sky-600 z-0 border-2 border-sky-600     '
+          className=' absolute rounded-full h-11 transition-all duration-300 bg-sky-900 z-0      '
           style={{  bottom: 2, left: sliderPosition -5 , width: sliderWidth + 10 }}
 
         />
