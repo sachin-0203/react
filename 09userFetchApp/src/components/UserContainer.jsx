@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
 import { LoadingText } from './LoadingText';
 import { UserCard, ErrorCard, IdleCard } from './UserCard';
-import { UserActions } from './userActions';
+import { UserActions } from './UserActions';
 import { CustomeFetch } from './CustomeFetch';
 
 export const UserContainer = () => {
