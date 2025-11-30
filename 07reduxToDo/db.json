@@ -1,29 +1,14 @@
 {
   "todos": [
     {
-      "id": "1",
-      "title": "Learn Redux Toolkit",
-      "completed": false
+      "title": "Learn RTK",
+      "completed": false,
+      "id": 1
     },
     {
-      "id": "2",
-      "title": "Build Todo App",
-      "completed": true
-    },
-    {
-      "id": "5819",
-      "title": "enter new todo",
-      "completed": false
-    },
-    {
-      "id": "fc8c",
-      "title": "teat",
-      "completed": false
-    },
-    {
-      "id": "ebdf",
-      "title": "new todo",
-      "completed": false
+      "title": "Learn RTK Query",
+      "completed": true,
+      "id": 2
     }
   ]
 }

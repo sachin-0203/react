@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import { useDispatch } from 'react-redux'
-import { addTodo } from "../features/TodoSlice";
 import { addTodoAsync } from "../features/TodoSlice";
 
 
@@ -35,7 +34,7 @@ const AddTodo = () => {
             className="flex justify-center border  border-dotted border-white rounded-md p-1"
           >
 
-            <input type="text" placeholder='Enter a Todo..' className= ' text-white pl-1 sm:p-1 rounded-sm text-md sm:text-lg outline-none w-full min-w-44 ' onChange={(e)=> setInput(e.target.value)} value={input} />
+            <input type="text" placeholder='Enter a Todo..' className='text-white pl-1 sm:p-1 rounded-sm text-md sm:text-lg outline-none w-full min-w-44 ' onChange={(e)=> setInput(e.target.value)} value={input} />
             <button type="submit" className=' rounded-sm px-3  bg-green-700 hover:bg-green-800 text-white active:scale-95'
             >
               Add 
