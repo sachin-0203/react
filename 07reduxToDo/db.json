@@ -1,13 +1,13 @@
 {
   "todos": [
     {
-      "title": "Learn RTK",
+      "title": "first",
       "completed": false,
       "id": 1
     },
     {
-      "title": "Learn RTK Query",
-      "completed": true,
+      "title": "second edited",
+      "completed": false,
       "id": 2
     }
   ]
